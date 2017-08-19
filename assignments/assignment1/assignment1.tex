@@ -1,0 +1,240 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Short Sectioned Assignment
+% LaTeX Template
+% Version 1.0 (5/5/12)
+%
+% This template has been downloaded from:
+% http://www.LaTeXTemplates.com
+%
+% Original author:
+% Frits Wenneker (http://www.howtotex.com)
+%
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[paper=a4, fontsize=11pt]{scrartcl} % A4 paper and 11pt font size
+
+\usepackage[T1]{fontenc} % Use 8-bit encoding that has 256 glyphs
+%\usepackage{fourier} % Use the Adobe Utopia font for the document - comment this line to return to the LaTeX default
+\usepackage[english]{babel} % English language/hyphenation
+\usepackage{mathtools}
+\usepackage{amsfonts,amsthm} % Math packages
+
+\usepackage{lipsum} % Used for inserting dummy 'Lorem ipsum' text into the template
+\usepackage{hyperref}
+\usepackage{url}
+\usepackage{numberedblock}
+\usepackage{graphicx}
+
+\hypersetup {
+    colorlinks=true,       % false: boxed links; true: colored links
+    linkcolor=blue,          % color of internal links (change box color with linkbordercolor)
+    urlcolor=blue           % color of external links
+}
+
+\usepackage{sectsty} % Allows customizing section commands
+%\allsectionsfont{\centering \normalfont\scshape} % Make all sections centered, the default font and small caps
+\allsectionsfont{\normalfont\scshape}
+
+\usepackage{fancyhdr} % Custom headers and footers
+\pagestyle{fancyplain} % Makes all pages in the document conform to the custom headers and footers
+\fancyhead{} % No page header - if you want one, create it in the same way as the footers below
+\fancyfoot[L]{} % Empty left footer
+\fancyfoot[C]{} % Empty center footer
+\fancyfoot[R]{\thepage} % Page numbering for right footer
+\renewcommand{\headrulewidth}{0pt} % Remove header underlines
+\renewcommand{\footrulewidth}{0pt} % Remove footer underlines
+\setlength{\headheight}{0pt} % Customize the height of the header
+
+\usepackage{titlesec}% http://ctan.org/pkg/titlesec
+\titleformat{\section}%
+  [hang]% <shape>
+  {\normalfont\bfseries\Large}% <format>
+  {}% <label>
+  {0pt}% <sep>
+  {}% <before code>
+\renewcommand{\thesection}{}% Remove section references...
+\renewcommand{\thesubsection}{\arabic{subsection}}%... from subsections
+
+\numberwithin{equation}{section} % Number equations within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+\numberwithin{figure}{section} % Number figures within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+\numberwithin{table}{section} % Number tables within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+
+\setlength\parindent{0pt} % Removes all indentation from paragraphs - comment this line for an assignment with lots of text
+
+%----------------------------------------------------------------------------------------
+%	TITLE SECTION
+%----------------------------------------------------------------------------------------
+
+\newcommand{\horrule}[1]{\rule{\linewidth}{#1}} % Create horizontal rule command with 1 argument of height
+
+\title{	
+\normalfont \normalsize 
+\textsc{CSCI 4360/6360 Data Science II} \\
+\textsc{Department of Computer Science} \\
+\textsc{University of Georgia} \\ [15pt] % Your university, school and/or department name(s)
+\horrule{0.5pt} \\[0.3cm] % Thin top horizontal rule
+\huge Assignment 1: Machine Learning Review \\ % The assignment title
+\horrule{2pt} \\[0.4cm] % Thick bottom horizontal rule
+}
+
+\author{DUE: Thursday, August 31 by 11:59:59pm} % Your name
+
+%\date{\normalsize\today} % Today's date or a custom date
+\date{\normalsize Out August 17, 2017}
+
+\begin{document}
+
+\maketitle % Print the title
+
+%----------------------------------------------------------------------------------------
+%	PROBLEM 1
+%----------------------------------------------------------------------------------------
+
+\section*{Overview}
+
+\subsection{Submitting}
+
+All submissions will go to \textbf{AutoLab}. You can access AutoLab at \url{https://autolab.cs.uga.edu}. You will first need to create an account on AutoLab before you can be added to the \texttt{csci4360-fa17} course and submit assignments. \\
+
+You can submit deliverables to the \textbf{Assignment 1} assignment that is open. When you do, you'll submit two files:
+
+\begin{enumerate}
+	\item \texttt{\textbf{assignment1.py}}: the Python script that implements your algorithms, and
+	\item \texttt{\textbf{assignment1.pdf}}: the PDF write-up with any questions that were asked
+\end{enumerate}
+
+\textbf{DO NOT DEVIATE} from these naming conventions! Doing so will result in the autograder issuing failing grades! \\
+
+There's no penalty for submitting as many times as you need to, but keep in mind that swamping the server at the last minute may result in your submission being missed; AutoLab is programmed to close submissions \emph{promptly} at 11:59pm on August 31 so give yourself plenty of time! A late submission because the server got hammered at the deadline will \emph{not} be acceptable (there is a \emph{small} grace period to account for unusually high load at deadline, but I strongly recommend you avoid the problem altogether and start early). \\
+
+\subsection{Reminders}
+
+\begin{itemize}
+	\item If you run into problems, ping the \texttt{\#questions} room of the Slack chat. If you still run into problems, ask me. But please please please, \textbf{do NOT} ask Google to give you the code you seek! I will be on the lookout for this (and already know some of the most popular venues that might have solutions or partial solutions to the questions here).
+	\item Prefabricated solutions (e.g. \texttt{scikit-learn}) are NOT allowed! You have to do the coding yourself!
+	\item If you collaborate with anyone, just mention their names in a code comment at the top of your homework file.
+\end{itemize}
+
+\section*{Questions}
+\setcounter{subsection}{0}
+
+\subsection{Conditional Probability and the Chain Rule \textbf{[10pts]}}
+
+\textbf{[5pts]} Recall the definition of conditional probability:
+
+$$
+P(A | B) = \frac{P(A \cap B)}{P(B)},
+$$
+
+where $\cap$ means ``intersection''. Prove that $P(A \cap B \cap C) = P(A | B, C) P(B | C) P(C)$. \\
+
+\textbf{[5pts]} Derive Bayes' Theorem from the law of conditional probability, and define each term in the equation with a 1-sentence description.
+
+\subsection{Total Probability \textbf{[10pts]}}
+
+Let's say I have two six-sided dice: one is fair, one is loaded. The loaded die has:
+
+$$
+P(x) =
+\begin{cases}
+	\frac{1}{2} & x = 6 \\
+	\frac{1}{10} & x \neq 6
+\end{cases}
+$$
+
+In addition to the two dice, I have a coin which I flip to determine which dice to roll. If the coin flip ends up heads I will roll the fair die, otherwise I'll roll the loaded one. The probability that the coin flip is heads is $p \in [0, 1]$. \\
+
+\textbf{[5pts]} What is the expectation of the die roll, in terms of $p$? \\
+
+\emph{Hint}: Recall that the expected value $E[X]$ of a discrete random variable $X$ (e.g., a coin flip) can be computed as
+
+$$
+E[X] = \sum_i x_i P(X = x_i)
+$$
+
+\textbf{[5pts]} What is the variance of the die roll, in terms of $p$? \\
+
+\emph{Hint}: Recall that the variance $\textrm{Var}(X)$ of a random variable $X$ can be computed as 
+
+$$
+\textrm{Var}(X) = E[X^2] - (E[X])^2
+$$
+
+\subsection{Naive Bayes \textbf{[15pts]}}
+
+Consider the learning function $f(X) \rightarrow Y$, where class label $Y \in \{T, F\}$ and $X = \{x_1, x_2, ..., x_n\}$, where $x_1$ is a boolean attribute and ${x_2, ..., x_n}$ are continuous attributes. \\
+
+\textbf{[10pts]} Assuming the continuous attributes are modeled as Gaussians, give and \emph{briefly} explain the total number of parameters that you would need to estimate in order to classify a future observation using a Naive Bayes (NB) classifier. \\
+
+\emph{Hint}: recall that a Naive Bayes classifier requires both the conditional probabilities $P(X = x_i | Y)$ and the class prior probability $P(Y)$. \\
+
+\textbf{[5pts]} How many more parameters would be required without the conditional independence assumption? No need for an exact number; an order of magnitude estimate will suffice.
+
+\subsection{Logistic Regression \textbf{[15pts]}}
+
+In Logistic Regression (LR), we assume the observations are independent of each other (not \emph{conditionally} independent, just independent). \\
+
+\textbf{[10pts]} Prove the decision boundary for Logistic Regression is linear. i.e., show that $P(Y | X)$ has the form:
+
+$$
+w_0 + \sum_i w_i X_i,
+$$
+
+where $Y \in \{0, 1\}$, and the quantity of the sum in the above equation will determine whether LR predicts 1 or 0. \\
+
+\emph{Hint}: Recall that
+
+$$
+P(Y = 0 | X) = \frac{1}{1 + \textrm{exp}(w_0 + \sum_i w_i X_i)},
+$$
+
+and that $P(Y = 0 | X) + P(Y = 1 | X) = 1$. \\
+
+\textbf{[5pts]} \emph{Briefly} describe one advantage and one disadvantage of LR compared to NB.
+
+\subsection{Coding \textbf{[50pts]}}
+
+In this problem you will implement Logistic Regression (LR) for a document classification task. \\
+
+\textbf{[10pts]} Imagine a certain word is never observed during training, but appears in a testing set. What will happen when the NB classifier predicts the probability of the word? Explain. Will LR have the same problem? Why or why not? \\
+
+\textbf{[40pts]} Implement LR in a script named \texttt{assignment1.py}. This script should accept three arguments, in the following order: 
+
+\begin{enumerate}
+	\item a file containing training data
+	\item a file containing training labels
+	\item a file containing testing data
+\end{enumerate}
+
+Your script should be able to be invoked as follows: \\
+
+\texttt{> python assignment1.py train.data train.labels test.data} \\
+
+For training LR, we found a step size $\eta$ around 0.0001 worked well. \\
+
+The data files (\texttt{train.data} and \texttt{test.data}) contains three numbers on each line. \\
+
+\texttt{<document\_id> <word\_id> <count>} \\
+
+Each row of the data files contains the count of how often a word (identified by ID) appears in a certain document. The corresponding label file for the training data has only one number per row of the file: the label, 1 or 0, of the document in the same row of the data file. \\
+
+For each line in the testing file, your code should print a predicted label (0 or 1) by itself on a single line. These output will be used to autograde your LR implementation on AutoLab. For example, if the following \texttt{test.data} file has four lines (words) in it, your program should print out four lines, each with either a 0 or a 1, e.g.
+
+\begin{verbatim}
+> python assignment1.py train.data train.labels test.data
+0
+1
+1
+0
+\end{verbatim}
+
+Don't be alarmed if the training process of LR takes a few minutes; a good sanity check is to make sure your weights are changing on each iteration. It is \textbf{highly recommended} that you use NumPy vectorized programming to train the weights efficiently.
+
+\end{document}
