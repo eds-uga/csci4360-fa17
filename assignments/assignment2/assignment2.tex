@@ -1,0 +1,347 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Short Sectioned Assignment
+% LaTeX Template
+% Version 1.0 (5/5/12)
+%
+% This template has been downloaded from:
+% http://www.LaTeXTemplates.com
+%
+% Original author:
+% Frits Wenneker (http://www.howtotex.com)
+%
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[paper=a4, fontsize=11pt]{scrartcl} % A4 paper and 11pt font size
+
+\usepackage[T1]{fontenc} % Use 8-bit encoding that has 256 glyphs
+%\usepackage{fourier} % Use the Adobe Utopia font for the document - comment this line to return to the LaTeX default
+\usepackage[english]{babel} % English language/hyphenation
+\usepackage{mathtools}
+\usepackage{amsfonts,amsthm} % Math packages
+
+\usepackage{lipsum} % Used for inserting dummy 'Lorem ipsum' text into the template
+\usepackage{hyperref}
+\usepackage{url}
+\usepackage{numberedblock}
+\usepackage{graphicx}
+
+\hypersetup {
+    colorlinks=true,       % false: boxed links; true: colored links
+    linkcolor=blue,          % color of internal links (change box color with linkbordercolor)
+    urlcolor=blue           % color of external links
+}
+
+\usepackage{sectsty} % Allows customizing section commands
+%\allsectionsfont{\centering \normalfont\scshape} % Make all sections centered, the default font and small caps
+\allsectionsfont{\normalfont\scshape}
+
+\usepackage{fancyhdr} % Custom headers and footers
+\pagestyle{fancyplain} % Makes all pages in the document conform to the custom headers and footers
+\fancyhead{} % No page header - if you want one, create it in the same way as the footers below
+\fancyfoot[L]{} % Empty left footer
+\fancyfoot[C]{} % Empty center footer
+\fancyfoot[R]{\thepage} % Page numbering for right footer
+\renewcommand{\headrulewidth}{0pt} % Remove header underlines
+\renewcommand{\footrulewidth}{0pt} % Remove footer underlines
+\setlength{\headheight}{0pt} % Customize the height of the header
+
+\usepackage{titlesec}% http://ctan.org/pkg/titlesec
+\titleformat{\section}%
+  [hang]% <shape>
+  {\normalfont\bfseries\Large}% <format>
+  {}% <label>
+  {0pt}% <sep>
+  {}% <before code>
+\renewcommand{\thesection}{}% Remove section references...
+\renewcommand{\thesubsection}{\arabic{subsection}}%... from subsections
+
+%\numberwithin{equation}{section} % Number equations within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+\numberwithin{figure}{section} % Number figures within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+\numberwithin{table}{section} % Number tables within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+
+\setlength\parindent{0pt} % Removes all indentation from paragraphs - comment this line for an assignment with lots of text
+
+%----------------------------------------------------------------------------------------
+%	TITLE SECTION
+%----------------------------------------------------------------------------------------
+
+\newcommand{\horrule}[1]{\rule{\linewidth}{#1}} % Create horizontal rule command with 1 argument of height
+
+\title{	
+\normalfont \normalsize 
+\textsc{CSCI 4360/6360 Data Science II} \\
+\textsc{Department of Computer Science} \\
+\textsc{University of Georgia} \\ [15pt] % Your university, school and/or department name(s)
+\horrule{0.5pt} \\[0.3cm] % Thin top horizontal rule
+\huge Assignment 2: Guest Lecturer Edition \\ % The assignment title
+\horrule{2pt} \\[0.4cm] % Thick bottom horizontal rule
+}
+
+\author{DUE: Thursday, September 14 by 11:59:59pm} % Your name
+
+%\date{\normalsize\today} % Today's date or a custom date
+\date{\normalsize Out August 31, 2017}
+
+\begin{document}
+
+\maketitle % Print the title
+
+%----------------------------------------------------------------------------------------
+%	PROBLEM 1
+%----------------------------------------------------------------------------------------
+
+\section*{Overview}
+
+\subsection{Submitting}
+
+All submissions will go to \textbf{AutoLab}. You can access AutoLab at:
+
+\begin{itemize}
+	\item \url{https://autolab.cs.uga.edu}
+\end{itemize}
+	
+You can submit deliverables to the \textbf{Assignment 2} assessment that is open. When you do, you'll submit two files:
+
+\begin{enumerate}
+	\item \texttt{\textbf{assignment2.py}}: the Python script that implements your algorithms, and
+	\item \texttt{\textbf{assignment2.pdf}}: the PDF write-up with any questions that were asked
+\end{enumerate}
+
+These should be packaged together in a tarball; the archive can be named whatever you want when you upload it to AutoLab, but the files in the archive should be named \textbf{exactly} what is above. Deviating from this convention could result in the autograder failing! \\
+
+If you don't remember exactly how to create a tarball compressed archive, this article from 2000 explains it in perfect detail:
+
+\begin{itemize}
+	\item	\url{http://infohost.nmt.edu/tcc/help/unix/tar_build.html}
+\end{itemize}
+
+Once you have the tarball of the folder with the two required files, upload it to AutoLab. There's no penalty for submitting as many times as you need to, but keep in mind that swamping the server at the last minute may result in your submission being missed; AutoLab is programmed to close submissions \emph{promptly} at 11:59pm on September 14, so give yourself plenty of time! A late submission because the server got hammered at the deadline will \emph{not} be acceptable (there is a \emph{small} grace period to account for unusually high load at deadline, but I strongly recommend you avoid the problem altogether and start early). \\
+
+Also, to save time while you're working on the coding portion, you are welcome to create a tarball archive of just the Python script and upload that to AutoLab. Once you get the autograder score you're looking for, you can then include the PDF in the folder, tarball everything, and upload it. AutoLab stores the entire submission history of every student on every assignment, so your autograder (code) score will be maintained and I can just use your most recent submission to get the PDF.
+
+\subsection{Reminders}
+
+\begin{itemize}
+	\item If you run into problems, ping the \texttt{\#questions} room of the Slack chat. If you still run into problems, ask me. But please please please, \textbf{do NOT} ask Google to give you the code you seek! I will be on the lookout for this (and already know some of the most popular venues that might have solutions or partial solutions to the questions here).
+	\item Prefabricated solutions (e.g. \texttt{scikit-learn}) are NOT allowed! You have to do the coding yourself!
+	\item If you collaborate with anyone, just mention their names in a code comment and/or at the top of your homework writeup.
+\end{itemize}
+
+\section*{Questions}
+\setcounter{subsection}{0}
+
+\subsection{Linear Regression \textbf{[20pts]}}
+
+Assume we are given $n$ training examples $(\vec{x}_1, y_1), (\vec{x}_2, y_2), ..., (\vec{x}_n, y_n)$, where each data point $\vec{x}_i$ has $m$ real-valued features (i.e., $\vec{x}_i$ is $m$-dimensional). The goal of regression is to learn to predict $y$ from $\vec{x}$, where each $y_i$ is also real-valued (i.e. continuous). \\
+
+The linear regression model assumes that the output $Y$ is a linear combination of input features $X$ plus noise terms $\epsilon$ from a given distribution, with weights on the input features given by $\beta$. \\
+
+We can write this in matrix form by stacking the data points $\vec{x}_i$ as rows of a matrix $X$, such that $x_{ij}$ is the $j$-th feature of the $i$-th data point. We can also write $Y$, $\beta$, and $\epsilon$ as column vectors, so that the matrix form of the linear regression model is:
+
+$$
+Y = X\beta + \epsilon
+$$
+
+where
+
+$$
+Y = 
+\begin{bmatrix}
+	y_1 \\
+	\vdots \\
+	y_n
+\end{bmatrix},
+\epsilon =
+\begin{bmatrix}
+	\epsilon_1 \\
+	\vdots \\
+	\epsilon_n
+\end{bmatrix},
+\beta =
+\begin{bmatrix}
+	\beta_1 \\
+	\vdots \\
+	\beta_m
+\end{bmatrix},
+\textrm{and } X = 
+\begin{bmatrix}
+	\vec{x}_1 \\
+	\vdots \\
+	\vec{x}_n
+\end{bmatrix},
+$$
+
+and where $\vec{x}_i = \begin{bmatrix}x_1, x_2, ..., x_n\end{bmatrix}$. \\
+
+Linear regression seeks to find the parameter vector $\beta$ that provides the best fit of the above regression model. There are lots of ways to measure the goodness of fit; one criteria is to find the $\beta$ that minimizes the squared-error loss function:
+
+$$
+J(\beta) = \sum_{i = 1}^n (y_i - \vec{x}_i^T \beta)^2,
+$$
+
+or more simply in matrix form:
+
+\begin{equation}
+J(\beta) = (X\beta - Y)^T (X\beta - Y),
+\label{eq:sqerr}
+\end{equation}
+
+which can be solved directly under certain circumstances:
+
+\begin{equation}
+\hat{\beta} = (X^TX)^{-1} X^TY
+\label{eq:dirsol}
+\end{equation}
+
+(recall that the ``hat'' notation $\hat{\beta}$ is used to denote an \emph{estimate} of a true but unknown--and possibly, unknow\emph{able}--value) \\
+
+When we throw in the $\epsilon$ error term, assuming it is drawn from independent and identically distributed (``i.i.d.'') Gaussians (i.e., $\epsilon_i \sim \mathcal{N}(0, \sigma^2)$), then the above solution is also the MLE estimate for $P(Y | X; \beta)$. \\
+
+All told, then, we can make predictions $\hat{Y}$ using $\hat{\beta}$ ($X$ could be the training set, or new data altogether):
+
+$$
+\hat{Y} = X\hat{\beta} + \epsilon
+$$
+
+Now, when we perform least squares regression, we make certain idealized assumptions about the vector of error terms $\epsilon$, namely that each $\epsilon_i$ is i.i.d. according to $\mathcal{N}(0, \sigma^2)$ for some value of $\sigma$. In practice, these idealized assumptions often don't hold, and when they fail, they can outright implode. An easy example and inherent drawback of Gaussians is that they are sensitive to outliers; as a result, noise with a ``heavy tail'' (more weight at the ends of the distribution than your usual Gaussian) will pull your regression weights toward it and away from its optimal solution. \\
+
+In cases where the noise term $\epsilon_i$ can be arbitrarily large, you have a situation where your linear regression needs to be \emph{robust} to outliers. Robust methods start by weighting each observation \emph{unequally}: specifically, observations that produce large residuals are down-weighted. \\
+
+\textbf{[15pts]} In this problem, you will assume $\epsilon_1, ..., \epsilon_n$ are i.i.d. drawn from a Laplace distribution (rather than $\mathcal{N}(0, \sigma^2))$; that is, each $\epsilon_i \sim \textrm{Lap}(0, b)$, where $\textrm{Lap}(0, b) = \frac{1}{2b} \textrm{exp}(-\frac{|\epsilon_i|}{b} )$. \\
+
+Derive the loss function $J_{\textrm{Lap}}(\beta)$ whose minimization is equivalent to finding the MLE of $\beta$ under the above noise model. \\
+
+\emph{Hint \#1}: Recall the critical point above about the form of the MLE; start by writing out $P(Y_i | X_i; \beta)$. \\
+
+\emph{Hint \#2}: Logarithms nuke pesky terms with exponents without changing linear relationships. \\
+
+\emph{Hint \#3}: Multiplying an equation by -1 will switch from ``argmin'' to ``argmax'' and vice versa. \\
+
+\textbf{[5pts]} Why do you think the above model provides a more robust fit to data compared to the standard model assuming the noise terms are distributed as Gaussians? Be specific!
+
+\subsection{Regularization \textbf{[30pts]}}
+
+When the number of features $m$ is much larger than the number of training examples $n$, or very few of the features are non-zero (as we saw in Assignment 1), the matrix $X^TX$ is not full rank, and therefore cannot be inverted. This wasn't a problem for logistic regression which didn't have a closed-form solution anyway; for ``vanilla'' linear regression, however, this is a show-stopper. \\
+
+Instead of minimizing our original loss function $J(\beta)$, we minimize a new loss function $J_R(\beta)$ (where the $R$ is for ``regularized'' linear regression):
+
+$$
+J_R(\beta) = \sum_{i = 1}^n (Y_i - X_i^T \beta)^2 + \lambda \sum_{j = 1}^m \beta_j^2,
+$$
+
+which can be rewritten as:
+
+\begin{equation}
+J_R(\beta) = (X\beta - Y)^T(X\beta - Y) + \lambda ||\beta||^2
+\label{eq:reg}
+\end{equation}
+
+\textbf{[5pts]} Explain what happens as $\lambda \rightarrow 0$ and $\lambda \rightarrow \infty$ in terms of $J$, $J_R$, and $\beta$. \\
+
+\textbf{[15pts]} Rather than viewing $\beta$ as a fixed but unknown parameter (i.e. something we need to solve for), we can consider $\beta$ as a random variable. In this setting, we can specify a prior distribution $P(\beta)$ on $\beta$ that expresses our prior beliefs about the types of values $\beta$ should take. Then, we can estimate $\beta$ as:
+
+\begin{equation}
+\beta_{\textrm{MAP}} = \textrm{argmax}_{\beta} \prod_{i = 1}^n P(Y_i | X_i; \beta) P(\beta),
+\label{eq:map}
+\end{equation}
+
+where MAP is the \emph{maximum a posteriori} estimate. \\
+
+(aside: this is different from the MLE, which is the frequentist strategy for solving for a parameter. think of MAP as the Bayesian version.) \\
+
+Show that maximizing Equation~\ref{eq:map} can be expressed as \emph{minimizing} Equation~\ref{eq:reg} with the assumption of a Gaussian prior on $\beta$, i.e. $P(\beta) \sim \mathcal{N}(0, I\sigma^2 / \lambda)$. In other words, show that the $L_2$-norm regularization term in Equation~\ref{eq:reg} is effectively imposing a Gaussian prior assumption on the parameter $\beta$. \\
+
+\emph{Hint \#1}: Start by writing out Equation~\ref{eq:map} and filling in the probability terms. \\
+
+\emph{Hint \#2}: Logarithms nuke pesky terms with exponents without changing linear relationships. \\
+
+\emph{Hint \#3}: Multiplying an equation by -1 will switch from ``argmin'' to ``argmax'' and vice versa. \\
+
+\textbf{[10pts]} What is the probabilistic interpretation of $\lambda \rightarrow 0$ under this model? What about $\lambda \rightarrow \infty$? Take note: this is asking a related but \emph{different} question than the first part of this problem! \\
+
+\emph{Hint}: Consider how the prior $P(\beta)$ is affected by changing $\lambda$.
+
+\subsection{Computational Botany \textbf{[10pts]}}
+
+One model for estimating the economic net impact of importing a plant species is as follows:
+
+$$
+ENB = \left[ \pi * TPR * (V_L - V_T) \right] - \left[ (1 - \pi) * FPR * V_T \right],
+$$
+
+where $\pi$ is the probability the proposed species is invasive, $TPR$ and $FPR$ are the true and false positive rates respectively, $V_T$ is the expected benefit, and $V_L$ is the expected losses (assuming the species is truly invasive). The result, $ENB$, is the \emph{expected net benefit}. \\
+
+This is a very general process for assessing the potential economic damage of plant species proposed for importation. One weakness of the approach is the assumption of independence: there is no explicit definition of time or space in the model, and despite the use of regression trees, the features are generally assumed to be independent as well (i.e., any dependences in the features is discovered as part of the learning procedure, rather than explicitly modeled \emph{a priori}). \\
+
+\textbf{[10pts]} Devise an approach to investigate violations of the various independence assumptions. Take care to be explicit about which independence assumption you are testing, and how you can prove (either formally or through empirical experiments) whether a violation is occurring.
+
+\subsection{Evolutionary Computing \textbf{[40pts]}}
+
+\textbf{[5pts]} Compare generational versus steady state genetic algorithms. Discuss the advantages and disadvantages of each. \\
+
+\textbf{[5pts]} Compare Michigan versus Pittsburgh classifier systems. Discuss the advantages and disadvantages of each. \\
+
+\textbf{[30pts]} In this part, you'll re-implement your logistic regression code from the previous assignment to use a simple genetic algorithm to learn the weights, instead of gradient descent. \\
+
+Your script \texttt{assignment2.py} should accept the following required arguments:
+
+\begin{enumerate}
+	\item a file containing training data (same as Assignment 1)
+	\item a file containing training labels (same as Assignment 1)
+	\item a file containing testing data (same as Assignment 1)
+\end{enumerate}
+
+It should also be able to accept the following \emph{optional} arguments:
+
+\begin{itemize}
+	\item \texttt{-n}: a population size (default: 200)
+	\item \texttt{-s}: a per-generation survival rate (default: 0.3)
+	\item \texttt{-m}: a mutation rate (default: 0.05)
+	\item \texttt{-g}: a maximum number of generations (default: 50)
+	\item \texttt{-r}: a random seed (default: -1)
+\end{itemize}
+
+The handout on AutoLab contains a skeleton script with the command-line parsing ready to go. You'll use the same dataset as before: the training set for your evolutionary algorithm to learn good weights, and the testing set to evaluate the weights. \\
+
+Your evolutionary algorithm for learning the weights should have a few core components: \\
+
+\textbf{Random population initialization.} You should initialize a full array of weights \emph{randomly} (don't use all 0s!); this counts as a single ``person'' in the full population. Consequently, initialize $n$ arrays of weights randomly for your full population. You'll evaluate each of these weights arrays independently and pick the best-performing ones to carry on to the next generation. \\
+
+\textbf{Fitness function.} This is a way of evaluating how ``good'' your current solution is. Fortunately, we have this already: the objective function! You can use the weights to predict the training labels (as you did during gradient descent); the fitness for a set of weights is then the \emph{average classification accuracy}. \\
+
+\textbf{Reproduction.} Once you've evaluated the fitness of your current population, you'll use that information to evolve the ``strongest.'' You'll first take the top $s\%$--the $ns$ arrays of weights with the highest fitness scores--and set them aside as the ``parents'' of the next generation. Then, you'll ``breed'' random pairs of these parents parents to produce ``children'' until you have $n$ arrays of weights again. The breeding is done by simply averaging the two sets of parent weights together. \\
+
+\textbf{Mutation.} Each individual weight has a mutation rate of $m$. Once you've computed the ``child'' weight array from two parents, you need to determine where and how many of the elements in the child array will mutate. First, flip a coin that lands on heads (i.e., indicates mutation) with probability $m$ (the mutation rate) for each weight $w_i$. Then, for each mutation, you'll generate the new $w_i$ by sampling from a Gaussian distribution with mean and variance set to be the empirical mean and variance of \emph{all} the $w_i$ weights of the \emph{previous} generation. So if $W_{p}$ is the $n \times |\beta|$ matrix of the previous population of weights, then we can define $\mu_i = W_p\left[:, i\right]\textrm{.mean()}$ and $\sigma_i^2 = W_p\left[:, i\right]\textrm{.var()}$. Using these quantities, we can then draw our new weight $w_i \sim \mathcal{N}(\mu_i, \sigma_i^2)$. \\
+
+\textbf{Generations.} You'll run the fitness evaluation, reproduction, and mutation repeatedly for $g$ generations, after which you'll take the set of weights from the final population with the highest fitness and evaluate these weights against the testing dataset.
+
+Your script should be able to be invoked as follows: \\
+
+\texttt{> python assignment2.py train.data train.label test.data} \\
+
+with the optional parameters then able to be stated at the end. The data files (\texttt{train.data} and \texttt{test.data}) contain three numbers on each line: \\
+
+\texttt{<document\_id> <word\_id> <count>} \\
+
+Each row of the data files contains the count of how often a given word (identified by ID) appears in certain documents (also identified by ID). The corresponding labels for the data has only one number per row in the file: the label, 1 or 0, of the document with ID corresponding to the row of the label in the label file. For example, a 0 on the $27^{th}$ line of the label file means the document with ID 27 has the label 0. \\
+
+After you've found your final weights and used them to make predictions on the test set, your code should print a predicted label (0 or 1) by itself on a single line, \emph{one for each document}--this means a single line of output per unique document ID (or per line in one of the \texttt{.label} files). The output will be used to autograde your GA on AutoLab. For example, if the following \texttt{test.data} file has four unique document IDs in it, your program should print out four lines, each with a 1 or 0 on it, e.g.:
+
+\begin{verbatim}
+> python assignment2.py train.data train.label test.data
+0
+0
+1
+1
+\end{verbatim}
+
+Evolutionary programs \textbf{will take longer} than logistic regression's gradient descent. I strongly recommend staying under a population size of 300, with no more than about 300 generations. \textbf{Make liberal use of NumPy vectorized programming} to ensure your program is running as efficiently as possible. The AutoLab autograder timeout will be extended to about 10 minutes, but you should be able to get reasonable training performance without having to go even half that long.
+
+\end{document}
