@@ -116,13 +116,13 @@ You can submit deliverables to the \textbf{Assignment 2} assessment that is open
 
 These should be packaged together in a tarball; the archive can be named whatever you want when you upload it to AutoLab, but the files in the archive should be named \textbf{exactly} what is above. Deviating from this convention could result in the autograder failing! \\
 
-If you don't remember exactly how to create a tarball compressed archive, this article from 2000 explains it in perfect detail:
+To create the tarball archive to submit, run the following command (on a *nix machine):
 
-\begin{itemize}
-	\item	\url{http://infohost.nmt.edu/tcc/help/unix/tar_build.html}
-\end{itemize}
+\begin{verbatim}
+	> tar cvf assignment2.tar assignment2.py assignment2.pdf
+\end{verbatim}
 
-Once you have the tarball of the folder with the two required files, upload it to AutoLab. There's no penalty for submitting as many times as you need to, but keep in mind that swamping the server at the last minute may result in your submission being missed; AutoLab is programmed to close submissions \emph{promptly} at 11:59pm on September 14, so give yourself plenty of time! A late submission because the server got hammered at the deadline will \emph{not} be acceptable (there is a \emph{small} grace period to account for unusually high load at deadline, but I strongly recommend you avoid the problem altogether and start early). \\
+This will create a new file, \texttt{assignment2.tar}, which is basically a zip file containing your Python script and PDF write-up. Upload the archive to AutoLab. There's no penalty for submitting as many times as you need to, but keep in mind that swamping the server at the last minute may result in your submission being missed; AutoLab is programmed to close submissions \emph{promptly} at 11:59pm on September 14, so give yourself plenty of time! A late submission because the server got hammered at the deadline will \emph{not} be acceptable (there is a \emph{small} grace period to account for unusually high load at deadline, but I strongly recommend you avoid the problem altogether and start early). \\
 
 Also, to save time while you're working on the coding portion, you are welcome to create a tarball archive of just the Python script and upload that to AutoLab. Once you get the autograder score you're looking for, you can then include the PDF in the folder, tarball everything, and upload it. AutoLab stores the entire submission history of every student on every assignment, so your autograder (code) score will be maintained and I can just use your most recent submission to get the PDF.
 
