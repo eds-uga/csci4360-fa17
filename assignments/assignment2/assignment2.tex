@@ -282,7 +282,7 @@ This is a very general process for assessing the potential economic damage of pl
 
 \textbf{[10pts]} Devise an approach to investigate violations of the various independence assumptions. Take care to be explicit about which independence assumption you are testing, and how you can prove (either formally or through empirical experiments) whether a violation is occurring.
 
-\subsection{Evolutionary Computing \textbf{[40pts]}}
+\subsection{Genetic Programming \textbf{[40pts]}}
 
 \textbf{[5pts]} Compare generational versus steady state genetic algorithms. Discuss the advantages and disadvantages of each. \\
 
@@ -320,7 +320,9 @@ Your evolutionary algorithm for learning the weights should have a few core comp
 
 \textbf{Mutation.} Each individual weight has a mutation rate of $m$. Once you've computed the ``child'' weight array from two parents, you need to determine where and how many of the elements in the child array will mutate. First, flip a coin that lands on heads (i.e., indicates mutation) with probability $m$ (the mutation rate) for each weight $w_i$. Then, for each mutation, you'll generate the new $w_i$ by sampling from a Gaussian distribution with mean and variance set to be the empirical mean and variance of \emph{all} the $w_i$ weights of the \emph{previous} generation. So if $W_{p}$ is the $n \times |\beta|$ matrix of the previous population of weights, then we can define $\mu_i = W_p\left[:, i\right]\textrm{.mean()}$ and $\sigma_i^2 = W_p\left[:, i\right]\textrm{.var()}$. Using these quantities, we can then draw our new weight $w_i \sim \mathcal{N}(\mu_i, \sigma_i^2)$. \\
 
-\textbf{Generations.} You'll run the fitness evaluation, reproduction, and mutation repeatedly for $g$ generations, after which you'll take the set of weights from the final population with the highest fitness and evaluate these weights against the testing dataset.
+\textbf{Generations.} You'll run the fitness evaluation, reproduction, and mutation repeatedly for $g$ generations, after which you'll take the set of weights from the final population with the highest fitness and evaluate these weights against the testing dataset. \\
+
+The parent and child populations should be kept \emph{distinct} during reproduction, and only the children should undergo mutation! \\
 
 Your script should be able to be invoked as follows: \\
 
