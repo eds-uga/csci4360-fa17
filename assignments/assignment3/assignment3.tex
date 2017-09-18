@@ -81,7 +81,7 @@
 \textsc{Department of Computer Science} \\
 \textsc{University of Georgia} \\ [15pt] % Your university, school and/or department name(s)
 \horrule{0.5pt} \\[0.3cm] % Thin top horizontal rule
-\huge Assignment 3: All-Natural Programming \\ % The assignment title
+\huge Assignment 3: All-Natural Data Science \\ % The assignment title
 \horrule{2pt} \\[0.4cm] % Thick bottom horizontal rule
 }
 
@@ -208,7 +208,7 @@ You'll also be provided the boilerplate to read in the necessary command-line pa
 	\item \texttt{-o}: a file path to an output file, where the prediction will be written
 \end{enumerate}
 
-Your code will read in the image and convert it to a $\texttt{height} \times \texttt{width} \times \texttt{frames}$ NumPy array; we'll call this $M$, and say it has shape $h \times w \times f$. From there, you'll need to derive the parameters of the LDS: the appearance model $C$ and the state space data $X$ (both can be derived by performing a singular value decomposition on $Y$, which is formed by stacking all the pixel trajectories of $M$ as rows of $Y$). Once you've learned $C$ and $X$, you can learn the transition matrix $A$ using the pseudo-inverse:
+Your code will read in the NumPy array representing a dynamic texture video; it will have dimensions $\texttt{frames} \times \texttt{height} \times \texttt{width}$. We'll call this $M$, and say it has shape $f \times h \times w$. From there, you'll need to derive the parameters of the LDS: the appearance model $C$ and the state space data $X$ (both can be derived by performing a singular value decomposition on $Y$, which is formed by stacking all the pixel trajectories of $M$ as rows of $Y$). Once you've learned $C$ and $X$, you can learn the transition matrix $A$ using the pseudo-inverse:
 
 $$
 A = X_2^f (X_1^{f - 1})^{\diamond}
