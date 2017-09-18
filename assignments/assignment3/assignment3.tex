@@ -1,0 +1,287 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Short Sectioned Assignment
+% LaTeX Template
+% Version 1.0 (5/5/12)
+%
+% This template has been downloaded from:
+% http://www.LaTeXTemplates.com
+%
+% Original author:
+% Frits Wenneker (http://www.howtotex.com)
+%
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[paper=a4, fontsize=11pt]{scrartcl} % A4 paper and 11pt font size
+
+\usepackage[T1]{fontenc} % Use 8-bit encoding that has 256 glyphs
+%\usepackage{fourier} % Use the Adobe Utopia font for the document - comment this line to return to the LaTeX default
+\usepackage[english]{babel} % English language/hyphenation
+\usepackage{mathtools}
+\usepackage{amsfonts,amsthm} % Math packages
+\usepackage{wrapfig}
+
+\usepackage{lipsum} % Used for inserting dummy 'Lorem ipsum' text into the template
+\usepackage{hyperref}
+\usepackage{url}
+\usepackage{numberedblock}
+\usepackage{graphicx}
+
+\hypersetup {
+    colorlinks=true,       % false: boxed links; true: colored links
+    linkcolor=blue,          % color of internal links (change box color with linkbordercolor)
+    urlcolor=blue           % color of external links
+}
+
+\usepackage{sectsty} % Allows customizing section commands
+%\allsectionsfont{\centering \normalfont\scshape} % Make all sections centered, the default font and small caps
+\allsectionsfont{\normalfont\scshape}
+
+\usepackage{fancyhdr} % Custom headers and footers
+\pagestyle{fancyplain} % Makes all pages in the document conform to the custom headers and footers
+\fancyhead{} % No page header - if you want one, create it in the same way as the footers below
+\fancyfoot[L]{} % Empty left footer
+\fancyfoot[C]{} % Empty center footer
+\fancyfoot[R]{\thepage} % Page numbering for right footer
+\renewcommand{\headrulewidth}{0pt} % Remove header underlines
+\renewcommand{\footrulewidth}{0pt} % Remove footer underlines
+\setlength{\headheight}{0pt} % Customize the height of the header
+
+\usepackage{titlesec}% http://ctan.org/pkg/titlesec
+\titleformat{\section}%
+  [hang]% <shape>
+  {\normalfont\bfseries\Large}% <format>
+  {}% <label>
+  {0pt}% <sep>
+  {}% <before code>
+\renewcommand{\thesection}{}% Remove section references...
+\renewcommand{\thesubsection}{\arabic{subsection}}%... from subsections
+
+%\numberwithin{equation}{section} % Number equations within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+\numberwithin{figure}{section} % Number figures within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+\numberwithin{table}{section} % Number tables within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+
+\setlength\parindent{0pt} % Removes all indentation from paragraphs - comment this line for an assignment with lots of text
+
+%----------------------------------------------------------------------------------------
+%	TITLE SECTION
+%----------------------------------------------------------------------------------------
+
+\newcommand{\horrule}[1]{\rule{\linewidth}{#1}} % Create horizontal rule command with 1 argument of height
+
+\title{	
+\normalfont \normalsize 
+\textsc{CSCI 4360/6360 Data Science II} \\
+\textsc{Department of Computer Science} \\
+\textsc{University of Georgia} \\ [15pt] % Your university, school and/or department name(s)
+\horrule{0.5pt} \\[0.3cm] % Thin top horizontal rule
+\huge Assignment 3: All-Natural Programming \\ % The assignment title
+\horrule{2pt} \\[0.4cm] % Thick bottom horizontal rule
+}
+
+\author{DUE: Thursday, September 28 by 11:59:59pm} % Your name
+
+%\date{\normalsize\today} % Today's date or a custom date
+\date{\normalsize Out September 18, 2017}
+
+\begin{document}
+
+\maketitle % Print the title
+
+%----------------------------------------------------------------------------------------
+%	PROBLEM 1
+%----------------------------------------------------------------------------------------
+
+\section*{Questions}
+
+This homework assignment wraps up our module on nature-inspired computing methods, and incorporates our topics on computer vision as well.
+
+\setcounter{subsection}{0}
+
+\subsection{Particle Swarm Optimization \textbf{[25pts]}}
+
+Particle Swarm Optimization (PSO) is yet another nature-inspired search algorithm that attempts to strike a balance between \emph{exploration} (conducting fast but low-resolution searches of large parameter spaces) with \emph{exploitation} (refining promising but small areas of the total search space). \\
+
+\href{https://www.youtube.com/watch?v=lX5qJimYusQ}{Here is a Matlab plot of PSO in action}: notice how the majority of agents (dots) very quickly gather in the bottom left corner (exploitation) representing the global minimum, but there are nonetheless a few dots that appear elsewhere on the energy landscape (exploration). \\
+
+Rather than devote a third homework assignment's coding section to yet another document classification scheme, we'll explore PSO from a more theoretical viewpoint. 
+
+PSO was introduced in 1995, and was inspired by the movement of groups of animals: insects, birds, and fish in particular. Virtual particles ``swarm'' the search space using a directed but stochastic algorithm designed to modulate efforts to find the global extremum (exploitation) while avoiding getting stuck in local extrema (exploration). It is relatively straightforward to implement and easy to parallelize; however, it is slow to converge to global optima, and ultimately cannot guarantee convergence to global optima. \\
+
+Formally: $N$ particles move around the search space $\mathcal{R}^n$ according to a few very simple rules, which are predicated on:
+\begin{itemize}
+	\item each particle's individual best position so far, and 
+	\item the overall swarm's best position so far
+\end{itemize}
+
+Each particle $i$ has a position $\vec{x}_i$, a velocity $\vec{v}_i$, and an optimal position so far $\vec{p}_i$, where $\vec{x}_i, \vec{v}_i, \vec{p}_i \in \mathcal{R}^n$. \\
+
+Globally, there is an optimal swarm-level position $\vec{g} \in \mathcal{R}^n$ (the supremum of all $\vec{p}_i$), cognitive and social parameters $c_1$ and $c_2$, and an inertia factor $\omega$. \\
+
+The update rule for velocity $\vec{v}_i$ at time $t + 1$ is as follows:
+
+$$
+\vec{v}_i(t + 1) = \omega \vec{v}_i(t) + c_1 r_1 \left[ \vec{p}_i(t) - \vec{x}_i(t) \right] + c_2 r_2 \left[ \vec{g}(t) - \vec{x}_i(t) \right]
+$$
+
+where $r_1, r_2 \sim U(0, 1)^n$. \\
+
+\textbf{[10pts]} Explain the effects of the cognitive ($c_1$) and social ($c_2$) parameters on the particle's velocity. What happens when one or both is small (i.e. close to 0)? What happens when one or both is large? What effects do the random numbers $r_1$ and $r_2$ have? Relate the effects of these parameters to their ``nature''-based inspiration, if you can. \\
+
+\textbf{[5pts]} The inertia parameter $\omega$ in this formulation is typically started at 1 and decreased slowly on each iteration of the optimization procedure. Why? \\
+
+\textbf{[5pts]} The update rule for position $\vec{x}_i$ at time $t + 1$ is as follows:
+
+$$
+\vec{x}_i(t + 1) = \vec{x}_i(t) + \vec{v}_i(t + 1)
+$$
+
+Given an objective function $f$ that can be evaluated using a position vector $\vec{x}_i(t)$, provide Python-like update statements for the best particle-specific estimate $\vec{p}_i(t + 1)$, and the best global, swarm-level estimate $\vec{g}(t + 1)$. \textbf{Note}: for the sake of consistency, let's assume you're searching for the global \emph{minimum} of $f$. \\
+
+\emph{Hint}: Remember that particle-specific estimates $\vec{p}_i(t)$ are also position vectors. \\
+
+\textbf{[5pts]} Give a \emph{concrete} example of how the PSO formulation described here could be improved (better global estimate in the same amount of time, faster convergence, tighter global convergence bounds, etc); you don't have to provide a specific implementation, but it should be clear how it would work (``more power'', therefore, is not a concrete example). Such formulations are easy to find online; I implore you to resist the urge to search! Please keep it brief; I'll stop reading after 2-3 lines.
+
+\subsection{Linear Dynamical Systems \textbf{[35pts]}}
+
+Linear dynamical systems (LDS) are multidimensional time series models with two components: an appearance component, and state component, that are used to model and identify dynamic textures. Dynamic textures are video sequences that display spatial regularities over time, regularities we want to capture while simultaneously retaining their temporal coherence. \\
+
+The appearance component is a straightforward application of dimensionality reduction, projecting the original temporal state into a low-dimensional ``state space'':
+
+$$
+\vec{y}_t = C\vec{x}_t + \vec{u}_t
+$$
+
+where $\vec{y}_t$ is the current frame, $\vec{x}_t$ is the corresponding ``state,'' $\vec{u}_t$ is white noise, and $C$ is the matrix that maps the appearance space to the state space (and vice versa), sometimes referred to as the \emph{output matrix}: it defines the appearance of the model. \\
+
+The state component is nothing more than an autoregressive model, a linear combination of Markov assumptions that model the movement of the system in the low-dimensional state space:
+
+$$
+\vec{x}_t = A\vec{x}_{t - 1} + W\vec{v}_t
+$$
+
+where $\vec{x}_t$ and $\vec{x}_{t - 1}$ are the positions of the model in the state space at times $t$ and $t - 1$ respectively, $W\vec{v}_t$ is the \emph{driving noise} at time $t$, and $A$ is the transition between states that defines how the model moves. \\
+
+\textbf{[5pts]} In the following questions, we're going to use only the state component of the LDS (i.e., we'll only use the second equation to model motion). How could we formalize ``ignoring'' the appearance component? What values could we use in the appearance component so that the original data $\vec{y}_t$ is also our state space data $\vec{x}_t$? \\
+
+\textbf{[10pts]} To simplify, let's ignore the appearance component and focus on a toy example in two dimensions. \\
+
+\begin{wrapfigure}{l}{0.5\textwidth}
+	\vspace{-3.5em}
+	\begin{center}
+		\includegraphics[width=0.45\textwidth]{noisy}
+	\end{center}
+	\vspace{-2.5em}
+\end{wrapfigure}
+
+Suppose each $\vec{x}_t$ is an $(x, y)$ pair from the plot. Set up the equations to solve for $A$ (Note: your solution should generalize to $n$ 2D points. Also, you can assume there is no noise term (i.e. $W\vec{v}_t = 0$)). \\
+
+\emph{Hint}: If there is no noise term, then each $\vec{x}_t$ can be written as $A\vec{x}_{t - 1}$ for all $t$. Write a few of these out, then organize them into systems of equations. \\
+
+\textbf{[10pts]} An interesting property of any model is its behavior in the limit. Those familiar with certain dimensionality reduction strategies will notice the simplified autoregressive model from the previous step looks an awful lot like a power iteration for finding approximate eigenvalues and eigenvectors of a matrix: if $M$ is your matrix of interest, you can iteratively update a vector $\vec{v}$ such that $\vec{v}_{n + 1} = M\vec{v}_n$, and each additional iteration will bring $\vec{v}$ closer to the true leading eigenvector of $M$. \\
+
+Assuming $M$ is invertible, we have the full eigen-decomposition of $M = U \Sigma U^T$, where $U$ is the matrix of eigenvectors $\left[ \vec{u}_1, ..., \vec{u}_n \right]$, and $\Sigma$ is the diagonal matrix of eigenvalues $\lambda_1, ..., \lambda_n$ sorted in descending order $\lambda_1 \ge \lambda_2 \ge ... \ge \lambda_n$. \\
+
+Write out the equation for $\vec{v}_{n + 2}$ using \textbf{only} $M$ and $\vec{v}_t$. Do the same for $\vec{v}_{t + 3}$. Describe how this generalizes for $n$ steps. What is happening in terms of $M$? \\
+
+\textbf{[10pts]} Now, rewrite those same equations, but instead of $M$, use its eigen-decomposition form. What happen as the number of iterations $n \rightarrow \infty$? What does this mean if there are eigenvalues $\lambda_i < 1$? What if $\lambda_i = 1$? What if $\lambda_i > 1$? What is therefore happening to the corresponding eigenvectors $\vec{u}_i$ of $\lambda_i$? (Note: $n \rightarrow \infty$ is known as the \emph{steady state}) \\ 
+
+\emph{Hint}: The eigenvector matrix $U$ has the property $U^TU = UU^T = I$, where $I$ is the identity matrix.
+
+\subsection{Coding \textbf{[40pts]}}
+
+In this question, you'll implement a basic LDS to model some example dynamic textures. \\
+
+You'll be allowed the following external Python functions: \texttt{scipy.linalg.svd} for computing the appearance model (output matrix) $C$, and \texttt{scipy.linalg.pinv} for computing the pseudo-inverse of the state-space observations for deriving the transition matrices. \textbf{No other external packages or SciPy functions will be allowed} (besides NumPy of course). \\
+
+You'll also be provided the boilerplate to read in the necessary command-line parameters:
+
+\begin{enumerate}
+	\item \texttt{-f}: a file path to a NumPy array file (the dynamic texture)
+	\item \texttt{-q}: an integer number of dimensions for the state-space
+	\item \texttt{-o}: a file path to an output file, where the prediction will be written
+\end{enumerate}
+
+Your code will read in the image and convert it to a $\texttt{height} \times \texttt{width} \times \texttt{frames}$ NumPy array; we'll call this $M$, and say it has shape $h \times w \times f$. From there, you'll need to derive the parameters of the LDS: the appearance model $C$ and the state space data $X$ (both can be derived by performing a singular value decomposition on $Y$, which is formed by stacking all the pixel trajectories of $M$ as rows of $Y$). Once you've learned $C$ and $X$, you can learn the transition matrix $A$ using the pseudo-inverse:
+
+$$
+A = X_2^f (X_1^{f - 1})^{\diamond}
+$$
+
+where $X_1^{f - 1}$ is a matrix of $\vec{x}_1$ through $\vec{x}_{f - 1}$ stacked as rows, $X_2^f$ is a matrix of $\vec{x}_2$ through $\vec{x}_f$ stacked as rows, and $D^{\diamond} = D^T(DD^T)^{-1}$ is the pseudo-inverse of $D$. \\
+
+Once you've learned $C$, $X$, and $A$, use these parameters to \textbf{simulate one time step}, generating $\vec{x}_{f + 1}$. Use $C$ to project this simulated point into the appearance space, generating $\vec{y}_{f + 1}$. Reshape it to be the same size as the original input sequence (i.e., $h \times w$), and then \textbf{write the array to the output file}. You can use the \texttt{numpy.save} function for this. \textbf{Any other program output will be ignored.} \\
+
+\textbf{[BONUS: 10pts]} Re-formulate your LDS implementation so that it also learns $W\vec{v}_t$, the driving noise parameter in the state space model. Recall that this first relies on the one-step prediction error:
+
+$$
+\vec{p}_t = \vec{x}_{t + 1} - A\vec{x}_t
+$$
+
+which is used to compute the covariance matrix of the driving noise:
+
+$$
+Q = \frac{1}{f - 1} \sum_1^{f - 1} \vec{p}_t \vec{p}_t^T
+$$
+
+Perform a singular value decomposition of $Q = U \Sigma V^T$, set $W = U \Sigma^{1/2}$, and $\vec{v}_t \sim \mathcal{N}(0, I)$. \\
+
+Implement the same 1-step prediction as before, this time with the noise term, so the state-space prediction is done as $\vec{x}_{t + 1} = A\vec{x}_t + W\vec{v}_t$. Does your accuracy improve? Why do you think this is the case? \\
+
+\textbf{[BONUS: 30pts]} Re-formulate your LDS so that your state space model is a second-order autoregressive process. That is, your model should now be:
+
+$$
+\vec{x}_{t + 1} = A_1\vec{x}_t + A_2\vec{x}_{t - 1}
+$$
+
+Learning the transition matrices $A_1$ and $A_2$ is conceptually the same as before, but implementation-wise requires considerably more ingenuity to implement, so if you need help, please come to office hours! \\
+
+Implement the same 1-step prediction as before, this time with the second-order model. Does your accuracy improve? Why do you think this is the case? \\
+
+(it doesn't matter if you include the driving noise from the first bonus question here or not; as in, you don't have to implement the first bonus question to also get this one)
+   
+\section*{Administration}
+\setcounter{subsection}{0}
+
+\subsection{Submitting}
+
+All submissions will go to \textbf{AutoLab}. You can access AutoLab at:
+
+\begin{itemize}
+	\item \url{https://autolab.cs.uga.edu}
+\end{itemize}
+	
+You can submit deliverables to the \textbf{Assignment 3} assessment that is open. When you do, you'll submit two files:
+
+\begin{enumerate}
+	\item \texttt{\textbf{assignment3.py}}: the Python script that implements your algorithms, and
+	\item \texttt{\textbf{assignment3.pdf}}: the PDF write-up with any questions that were asked
+\end{enumerate}
+
+These should be packaged together in a tarball; the archive can be named whatever you want when you upload it to AutoLab, but the files in the archive should be named \textbf{exactly} what is above. Deviating from this convention could result in the autograder failing! \\
+
+To create the tarball archive to submit, run the following command (on a *nix machine):
+
+\begin{verbatim}
+	> tar cvf assignment3.tar assignment3.py assignment3.pdf
+\end{verbatim}
+
+This will create a new file, \texttt{assignment3.tar}, which is basically a zip file containing your Python script and PDF write-up. Upload the archive to AutoLab. There's no penalty for submitting as many times as you need to, but keep in mind that swamping the server at the last minute may result in your submission being missed; AutoLab is programmed to close submissions \emph{promptly} at 11:59pm on September 28, so give yourself plenty of time! A late submission because the server got hammered at the deadline will \emph{not} be acceptable (there is a \emph{small} grace period to account for unusually high load at deadline, but I strongly recommend you avoid the problem altogether and start early). \\
+
+Also, to save time while you're working on the coding portion, you are welcome to create a tarball archive of just the Python script and upload that to AutoLab. Once you get the autograder score you're looking for, you can then include the PDF in the folder, tarball everything, and upload it. AutoLab stores the entire submission history of every student on every assignment, so your autograder (code) score will be maintained and I can just use your most recent submission to get the PDF.
+
+\subsection{Reminders}
+
+\begin{itemize}
+	\item If you run into problems, ping the \texttt{\#questions} room of the Slack chat. If you still run into problems, ask me. But please please please, \textbf{do NOT} ask Google to give you the code you seek! I will be on the lookout for this (and already know some of the most popular venues that might have solutions or partial solutions to the questions here).
+	\item Prefabricated solutions (e.g. \texttt{scikit-learn}, OpenCV) are NOT allowed! You have to do the coding yourself!
+	\item If you collaborate with anyone, just mention their names in a code comment and/or at the top of your homework writeup.
+\end{itemize}
+
+\end{document}
