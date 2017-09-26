@@ -74,8 +74,8 @@
 
 \newcommand{\horrule}[1]{\rule{\linewidth}{#1}} % Create horizontal rule command with 1 argument of height
 
-\title{	
-\normalfont \normalsize 
+\title{
+\normalfont \normalsize
 \textsc{CSCI 4360/6360 Data Science II} \\
 \textsc{Department of Computer Science} \\
 \textsc{University of Georgia} \\ [15pt] % Your university, school and/or department name(s)
@@ -84,10 +84,8 @@
 \horrule{2pt} \\[0.4cm] % Thick bottom horizontal rule
 }
 
-\author{DUE: Thursday, September 14 by 11:59:59pm} % Your name
+\author{Rajeswari Sivakumar} % Your name
 
-%\date{\normalsize\today} % Today's date or a custom date
-\date{\normalsize Out August 31, 2017}
 
 \begin{document}
 
@@ -96,43 +94,6 @@
 %----------------------------------------------------------------------------------------
 %	PROBLEM 1
 %----------------------------------------------------------------------------------------
-
-\section*{Overview}
-
-\subsection{Submitting}
-
-All submissions will go to \textbf{AutoLab}. You can access AutoLab at:
-
-\begin{itemize}
-	\item \url{https://autolab.cs.uga.edu}
-\end{itemize}
-	
-You can submit deliverables to the \textbf{Assignment 2} assessment that is open. When you do, you'll submit two files:
-
-\begin{enumerate}
-	\item \texttt{\textbf{assignment2.py}}: the Python script that implements your algorithms, and
-	\item \texttt{\textbf{assignment2.pdf}}: the PDF write-up with any questions that were asked
-\end{enumerate}
-
-These should be packaged together in a tarball; the archive can be named whatever you want when you upload it to AutoLab, but the files in the archive should be named \textbf{exactly} what is above. Deviating from this convention could result in the autograder failing! \\
-
-To create the tarball archive to submit, run the following command (on a *nix machine):
-
-\begin{verbatim}
-	> tar cvf assignment2.tar assignment2.py assignment2.pdf
-\end{verbatim}
-
-This will create a new file, \texttt{assignment2.tar}, which is basically a zip file containing your Python script and PDF write-up. Upload the archive to AutoLab. There's no penalty for submitting as many times as you need to, but keep in mind that swamping the server at the last minute may result in your submission being missed; AutoLab is programmed to close submissions \emph{promptly} at 11:59pm on September 14, so give yourself plenty of time! A late submission because the server got hammered at the deadline will \emph{not} be acceptable (there is a \emph{small} grace period to account for unusually high load at deadline, but I strongly recommend you avoid the problem altogether and start early). \\
-
-Also, to save time while you're working on the coding portion, you are welcome to create a tarball archive of just the Python script and upload that to AutoLab. Once you get the autograder score you're looking for, you can then include the PDF in the folder, tarball everything, and upload it. AutoLab stores the entire submission history of every student on every assignment, so your autograder (code) score will be maintained and I can just use your most recent submission to get the PDF.
-
-\subsection{Reminders}
-
-\begin{itemize}
-	\item If you run into problems, ping the \texttt{\#questions} room of the Slack chat. If you still run into problems, ask me. But please please please, \textbf{do NOT} ask Google to give you the code you seek! I will be on the lookout for this (and already know some of the most popular venues that might have solutions or partial solutions to the questions here).
-	\item Prefabricated solutions (e.g. \texttt{scikit-learn}) are NOT allowed! You have to do the coding yourself!
-	\item If you collaborate with anyone, just mention their names in a code comment and/or at the top of your homework writeup.
-\end{itemize}
 
 \section*{Questions}
 \setcounter{subsection}{0}
@@ -152,7 +113,7 @@ $$
 where
 
 $$
-Y = 
+Y =
 \begin{bmatrix}
 	y_1 \\
 	\vdots \\
@@ -170,7 +131,7 @@ Y =
 	\vdots \\
 	\beta_m
 \end{bmatrix},
-\textrm{and } X = 
+\textrm{and } X =
 \begin{bmatrix}
 	\vec{x}_1 \\
 	\vdots \\
@@ -224,8 +185,35 @@ Derive the loss function $J_{\textrm{Lap}}(\beta)$ whose minimization is equival
 
 \emph{Hint \#3}: Multiplying an equation by -1 will switch from ``argmin'' to ``argmax'' and vice versa. \\
 
-\textbf{[5pts]} Why do you think the above model provides a more robust fit to data compared to the standard model assuming the noise terms are distributed as Gaussians? Be specific!
+\begin{addmargin}[2em]{2em}% 1em left, 2em right
+  \textbf{ANSWER:}\\\\
+  $\epsilon = \hat Y - \hat X^T \beta$
+  \\\\
+  $P(Y_i | X_i; \beta) = \textrm{argmax}_{\beta}\epsilon_i = \frac{1}{2b} \textrm{exp}(-\frac{|\epsilon_i|}{b} $
+  \\\\
+  $P(Y_i | X_i; \beta) = \textrm{argmax}_{\beta} \prod_{i=1}^n \frac{1}{2b} \textrm{exp}(-\frac{|Y_i -X_i^T \beta|}{b}$
+  \\\\
+  $ln(P(Y_i | X_i; \beta)) = \textrm{argmax}_{\beta} ln(\prod_{i=1}^n \frac{1}{2b} \textrm{exp}(-\frac{|Y_i -X_i^T \beta|}{b})$
+  \\\\
+  $ln(P(Y_i | X_i; \beta)) = \textrm{argmax}_{\beta} \sum_{i=1}^n ln( \frac{1}{2b}) - \frac{|Y_i -X_i^T \beta|}{b}$
+  \\\\
+  $ln(P(Y_i | X_i; \beta)) = \textrm{argmax}_{\beta} nln( \frac{1}{2b}) - \frac{1}{b}\sum_{i=1}^n |Y_i -X_i^T \beta|$
+  \\\\
+  Given that the the above provides the MLE and the constant can fall away, the above can be used to find cost like so:
+  \\\\
+  $J_{Lap}(\beta)= \textrm{argmin}_{\beta} -\frac{1}{b}\sum_{i=1}^n |Y_i -X_i^T \beta|$\\\\
+  where b is the variance term in the Laplace distribution.
+  \\
 
+\end{addmargin}
+
+\textbf{[5pts]} Why do you think the above model provides a more robust fit to data compared to the standard model assuming the noise terms are distributed as Gaussians? Be specific!
+\\
+\begin{addmargin}[2em]{2em}
+  \textbf{ANSWER:}\\\\
+  Because the Laplacian distribution doesn't presume that the samples are centered heavily around the mean, there is less liklihood that an outlier will pull the mean in one direction or other. More specifically when one tries several concrete examples it becomes apparent that we are essentially calculating the median, which is inherently robust against outliers.
+  \\
+\end{addmargin}
 \subsection{Regularization \textbf{[30pts]}}
 
 When the number of features $m$ is much larger than the number of training examples $n$, or very few of the features are non-zero (as we saw in Assignment 1), the matrix $X^TX$ is not full rank, and therefore cannot be inverted. This wasn't a problem for logistic regression which didn't have a closed-form solution anyway; for ``vanilla'' linear regression, however, this is a show-stopper. \\
@@ -244,6 +232,12 @@ J_R(\beta) = (X\beta - Y)^T(X\beta - Y) + \lambda ||\beta||^2
 \end{equation}
 
 \textbf{[5pts]} Explain what happens as $\lambda \rightarrow 0$ and $\lambda \rightarrow \infty$ in terms of $J$, $J_R$, and $\beta$. \\
+
+\begin{addmargin}[2em]{2em}
+  \textbf{ANSWER:}\\\\
+  As $\lambda \rightarrow 0$, we are reducing the regularization term and thus cost as well, while as $\lambda \rightarrow \infty$ we are increasing cost. By selecting an appropriately sized $\lambda$ we prevent overfitting of our hypothesis function.
+  \\
+\end{addmargin}
 
 \textbf{[15pts]} Rather than viewing $\beta$ as a fixed but unknown parameter (i.e. something we need to solve for), we can consider $\beta$ as a random variable. In this setting, we can specify a prior distribution $P(\beta)$ on $\beta$ that expresses our prior beliefs about the types of values $\beta$ should take. Then, we can estimate $\beta$ as:
 
@@ -264,9 +258,33 @@ Show that maximizing Equation~\ref{eq:map} can be expressed as \emph{minimizing}
 
 \emph{Hint \#3}: Multiplying an equation by -1 will switch from ``argmin'' to ``argmax'' and vice versa. \\
 
-\textbf{[10pts]} What is the probabilistic interpretation of $\lambda \rightarrow 0$ under this model? What about $\lambda \rightarrow \infty$? Take note: this is asking a related but \emph{different} question than the first part of this problem! \\
+\begin{addmargin}[2em]{2em}
+  \textbf{ANSWER:}\\\\
+  $\beta_{\textrm{MAP}} = \textrm{argmax}_{\beta} \prod_{i = 1}^n P(Y_i | X_i; \beta) P(\beta)$
+  \\\\
+  $ln(\beta_{\textrm{MAP}}) = ln(\textrm{argmax}_{\beta} \prod_{i = 1}^n P(Y_i | X_i; \beta) P(\beta))$
+  \\\\
+  $ln(\beta_{\textrm{MAP}}) = \textrm{argmax}_{\beta} \sum_{i = 1}^n P(Y_i | X_i; \beta) + P(\beta_i)$
+  \\\\
+  $ln(\beta_{\textrm{MAP}}) = \textrm{argmax}_{\beta} \sum_{i = 1}^n P(Y_i | X_i; \beta) + \sum_{i=1}^nP(\beta_i)$
+  \\\\
+  $ln(\beta_{\textrm{MAP}}) = \textrm{argmax}_{\beta} \sum_{i = 1}^n P(Y_i | X_i; \beta) + \sum_{i=1}^nP(\beta_i)$
+  \\\\
+  $ln(\beta_{\textrm{MAP}}) = \sum_{i = 1}^n (Y_i - X_i^T \beta)^2  + \sum_{i=1}^n(\beta_i)^2$
+  \\\\
+  $J_R(\beta) = \sum_{i = 1}^n (Y_i - X_i^T \beta)^2  + \lambda\sum_{i=1}^n(\beta_i)^2$ $\rightarrow$ introduce lambda to moderate effect of $\beta$.
+  \\
+\end{addmargin}
 
-\emph{Hint}: Consider how the prior $P(\beta)$ is affected by changing $\lambda$.
+\textbf{[10pts]} What is the probabilistic interpretation of $\lambda \rightarrow 0$ under this model? What about $\lambda \rightarrow \infty$? Take note: this is asking a related but \emph{different} question than the first part of this problem! \\
+\begin{addmargin}[2em]{2em}
+  \textbf{ANSWER:}\\\\
+  We are essentially saying that the prior probability of $P(\beta)$ is 0 and vice versa.
+  \\
+\end{addmargin}
+
+\emph{Hint}: Consider how the prior $P(\beta)$ is affected by changing $\lambda$. \\
+
 
 \subsection{Computational Botany \textbf{[10pts]}}
 
@@ -280,13 +298,30 @@ where $\pi$ is the probability the proposed species is invasive, $TPR$ and $FPR$
 
 This is a very general process for assessing the potential economic damage of plant species proposed for importation. One weakness of the approach is the assumption of independence: there is no explicit definition of time or space in the model, and despite the use of regression trees, the features are generally assumed to be independent as well (i.e., any dependences in the features is discovered as part of the learning procedure, rather than explicitly modeled \emph{a priori}). \\
 
-\textbf{[10pts]} Devise an approach to investigate violations of the various independence assumptions. Take care to be explicit about which independence assumption you are testing, and how you can prove (either formally or through empirical experiments) whether a violation is occurring.
+\textbf{[10pts]} Devise an approach to investigate violations of the various independence assumptions. Take care to be explicit about which independence assumption you are testing, and how you can prove (either formally or through empirical experiments) whether a violation is occurring. \\
+
+\begin{addmargin}[2em]{2em}
+  \textbf{ANSWER:} \\\\
+  We could conditionally model ENB based on variables at a specific point in time and in a certain area. (i.e. How a certain plant species might affect an ecosystem versus another and how that change would vary depending on the types of flora and fauna present at different points in time.)
+\end{addmargin}
+
 
 \subsection{Genetic Programming \textbf{[40pts]}}
 
 \textbf{[5pts]} Compare generational versus steady state genetic algorithms. Discuss the advantages and disadvantages of each. \\
+\begin{addmargin}[2em]{2em}
+  \textbf{ANSWER:}\\\\
+  Generational approaches allow us to explore more solutions, while this may slowing down time to convergence. This is because unlike steady state genetic algorithms they don't keep the best parents of each generation.
+  \\
+\end{addmargin}
 
 \textbf{[5pts]} Compare Michigan versus Pittsburgh classifier systems. Discuss the advantages and disadvantages of each. \\
+
+\begin{addmargin}[2em]{2em}
+  \textbf{ANSWER:}\\\\
+  Michigan classifier systems train a set of rules together whil Pittsburgh classifier systems evolve rules one at a time. This makes the latter better suited for understanding the mechanism of the final solution while the former is better suited to finding robust solutions quickly.
+  \\
+\end{addmargin}
 
 \textbf{[30pts]} In this part, you'll re-implement your logistic regression code from the previous assignment to use a simple genetic algorithm to learn the weights, instead of gradient descent. \\
 
