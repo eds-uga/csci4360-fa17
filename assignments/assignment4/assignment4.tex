@@ -1,0 +1,293 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Short Sectioned Assignment
+% LaTeX Template
+% Version 1.0 (5/5/12)
+%
+% This template has been downloaded from:
+% http://www.LaTeXTemplates.com
+%
+% Original author:
+% Frits Wenneker (http://www.howtotex.com)
+%
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[paper=a4, fontsize=11pt]{scrartcl} % A4 paper and 11pt font size
+
+\usepackage[T1]{fontenc} % Use 8-bit encoding that has 256 glyphs
+%\usepackage{fourier} % Use the Adobe Utopia font for the document - comment this line to return to the LaTeX default
+\usepackage[english]{babel} % English language/hyphenation
+\usepackage{mathtools}
+\usepackage{amsfonts,amsthm} % Math packages
+\usepackage{wrapfig}
+
+\usepackage{lipsum} % Used for inserting dummy 'Lorem ipsum' text into the template
+\usepackage{hyperref}
+\usepackage{url}
+\usepackage{numberedblock}
+\usepackage{graphicx}
+
+\hypersetup {
+    colorlinks=true,       % false: boxed links; true: colored links
+    linkcolor=blue,          % color of internal links (change box color with linkbordercolor)
+    urlcolor=blue           % color of external links
+}
+
+\usepackage{sectsty} % Allows customizing section commands
+%\allsectionsfont{\centering \normalfont\scshape} % Make all sections centered, the default font and small caps
+\allsectionsfont{\normalfont\scshape}
+
+\usepackage{fancyhdr} % Custom headers and footers
+\pagestyle{fancyplain} % Makes all pages in the document conform to the custom headers and footers
+\fancyhead{} % No page header - if you want one, create it in the same way as the footers below
+\fancyfoot[L]{} % Empty left footer
+\fancyfoot[C]{} % Empty center footer
+\fancyfoot[R]{\thepage} % Page numbering for right footer
+\renewcommand{\headrulewidth}{0pt} % Remove header underlines
+\renewcommand{\footrulewidth}{0pt} % Remove footer underlines
+\setlength{\headheight}{0pt} % Customize the height of the header
+
+\usepackage{titlesec}% http://ctan.org/pkg/titlesec
+\titleformat{\section}%
+  [hang]% <shape>
+  {\normalfont\bfseries\Large}% <format>
+  {}% <label>
+  {0pt}% <sep>
+  {}% <before code>
+\renewcommand{\thesection}{}% Remove section references...
+\renewcommand{\thesubsection}{\arabic{subsection}}%... from subsections
+
+%\numberwithin{equation}{section} % Number equations within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+\numberwithin{figure}{section} % Number figures within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+\numberwithin{table}{section} % Number tables within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+
+\setlength\parindent{0pt} % Removes all indentation from paragraphs - comment this line for an assignment with lots of text
+
+%----------------------------------------------------------------------------------------
+%	TITLE SECTION
+%----------------------------------------------------------------------------------------
+
+\newcommand{\horrule}[1]{\rule{\linewidth}{#1}} % Create horizontal rule command with 1 argument of height
+
+\title{	
+\normalfont \normalsize 
+\textsc{CSCI 4360/6360 Data Science II} \\
+\textsc{Department of Computer Science} \\
+\textsc{University of Georgia} \\ [15pt] % Your university, school and/or department name(s)
+\horrule{0.5pt} \\[0.3cm] % Thin top horizontal rule
+\huge Assignment 4: I Heard You Like Graphs \\ % The assignment title
+\horrule{2pt} \\[0.4cm] % Thick bottom horizontal rule
+}
+
+\author{DUE: Thursday, October 19 by 11:59:59pm} % Your name
+
+%\date{\normalsize\today} % Today's date or a custom date
+\date{\normalsize Out October 5, 2017}
+
+\begin{document}
+
+\maketitle % Print the title
+
+%----------------------------------------------------------------------------------------
+%	PROBLEM 1
+%----------------------------------------------------------------------------------------
+
+\section*{Questions}
+
+This homework assignment focuses on graph theoretic methods and unsupervised learning.
+
+\setcounter{subsection}{0}
+
+\subsection{Spectral Clustering \textbf{[40pts]}}
+
+The general idea behind spectral clustering is to construct a mapping of data points to an eigenspace of a graph-induced affinity matrix $A$, with the hope that the points are well-separated in the eigenspace to the point where something simple like k-means will work well on the embedded data. \\
+
+A very simple affinity matrix can be constructed as follows:
+
+$$
+A_{i, j} = A_{j, i} =
+	\begin{cases}
+		1 & \textrm{if } d(\vec{x}_i, \vec{x}_j) \leq \Theta \\
+		0 & \textrm{otherwise} \\
+	\end{cases} 
+$$
+
+where $d(\vec{x}_i, \vec{x}_j)$ denotes Euclidean distance between points $\vec{x}_i$ and $\vec{x}_j$. \\
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[scale=0.7]{dataset}
+	\label{fig:data1}
+	\caption{Simple toy dataset.}
+\end{figure}
+
+As an example, consider forming an affinity matrix for the dataset in Figure 1 using the affinity equation above, using $\Theta = 1$. Then we get the affinity matrix in Figure 2. \\
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[scale=0.7]{affinity}
+	\label{fig:aff}
+	\caption{Affinity matrices of Fig. 1 with $\Theta = 1$.}
+\end{figure}
+
+For this particular example, the clusters $\{a, b\}$ and $\{c, d\}$ show up as nonzero blocks in the affinity matrix. This is, of course, artificial since we could have constructed the matrix $A$ using any ordering of $\{a, b, c, d\}$. For example, another possible affinity matrix $A$ could have been as in Figure 2(b). \\
+
+The key insight here is that the eigenvectors of both $A$ and $\tilde{A}$ have the same entries, just permuted. The eigenvectors with nonzero eigenvalues of $A$ are $\vec{e}_1 = \left[ 0.7, 0.7, 0, 0 \right]^T$ and $\vec{e}_2 = \left[ 0, 0, 0.7, 0.7 \right]^T$. Likewise, the nonzero eigenvectors of $\tilde{A}$ are $\vec{e}_1 = \left[ 0.7, 0, 0.7, 0 \right]^T$ and $\vec{e}_2 = \left[ 0, 0.7, 0, 0.7 \right]^T$. \\
+
+Spectral clustering embeds the original data points in a new space by using the coordinates of these eigenvectors. Specifically, it maps the point $\vec{x}_i$ to the point $\left[ e_1(i), e_2(i), ..., e_k(i) \right]$, where $\vec{e}_1, ..., \vec{e}_k$ are the top $k$ eigenvectors of $A$. We refer to this mapping as the \emph{spectral embedding}. See Figure 3 for an example. \\
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[scale=0.7]{embedding}
+	\label{fig:embed}
+	\caption{Using the eigenvectors of $A$ to embed the data points. Notice that the points $\{a, b, c, d\}$ are tightly clustered in this space.}
+\end{figure}
+
+In this problem, we'll analyze how spectral clustering works on the simple dataset shown in the next figure. \\
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[scale=0.7]{rectangles}
+	\label{fig:rect}
+	\caption{Dataset with rectangles.}
+\end{figure}
+
+\textbf{[5pts]} For the dataset in Figure 4, assume that the first cluster has $m_1$ points in it, and the second one has $m_2$ points. If we use the affinity equation from before to compute the affinity matrix $A$, what $\Theta$ value would you choose and why? \\
+
+\textbf{[10pts]} The second step is to compute the first $k$ dominant eigenvectors of the affinity matrix, where $k$ is the number of clusters we want to have. For the dataset in the above figure, and the affinity matrix defined by the previous equation, is there a value of $\Theta$ for which you can analytically compute the first two eigenvalues and eigenvectors? If not, explain why not. If yes, compute and record these eigenvalues and eigenvectors. What are the other ($(m_1 + m_2) - k$) eigenvalues? Explain briefly. \\\\
+
+Spectral clustering algorithms often make use a graph Laplacian matrix, $L$. A favorite variant is the \emph{normalized} graph Laplacian, $L = D^{-1/2}AD^{-1/2}$, as this formulation has many convenient properties ($D$ is a diagonal matrix whose $i^{th}$ diagonal element, $d_{ii}$, is the sum of the $i^{th}$ row of $A$). \\
+
+\textbf{[10pts]} Show that a vector $\vec{v} = \left[ \sqrt{d_{11}}, \sqrt{d_{22}}, ..., \sqrt{d_{nn}} \right]^T$ is an eigenvector of $L$ with corresponding eigenvalue $\lambda = 1$. \\\\
+
+One of the convenient properties of normalized graph Laplacians is the eigenvalue $\lambda_1$ of the leading eigenvector is, at most, 1; all other eigenvalues $\lambda_2, ..., \lambda_n$ have values strictly smaller than 1. \\
+
+Consider a matrix $P$, where $P = D^{-1}A$, where $A$ is our affinity matrix and $D$ is the diagonal matrix. Each $p_{ij} = a_{ij} / d_{ii}$. Note the intuition of this operation: we are normalizing each edge by the total degree of the incoming vertex, essentially creating a ``transition probability'' $p_{ij}$ of transitioning from vertex $i$ to vertex $j$. In other words, each row of $P$ sums to 1, so it is therefore a valid probability transition matrix. Hence, $P^t$ is a matrix whose $\{i, j\}^{th}$ element shows the probability of being at vertex $j$ after $t$ number of steps, if one started at vertex $i$. \\
+
+\textbf{[10pts]} Show that $P^{\infty} = D^{-1/2} \vec{v}_1 \vec{v}_1^T D^{-1/2}$. This property shows that if points are viewed as vertices according to a transition probability matrix, then $\vec{v}_1$ is the only eigenvector needed to compute the probability distribution over $P^{\infty}$. \\
+
+\textbf{[5pts]} Let $X$ be an $N \times d$ matrix, and $Y = X^T$. If the SVD of $Y = U\Sigma V^T$, show that the columns of $V$ are the PCA of $X$ (recall that PCA operates on the covariance $Q$ of $X$, where $Q = X^TX$).
+
+\subsection{Hierarchical Clustering \textbf{[20pts]}}
+
+We spent a little bit of time in class discussing hierarchical clustering, of which--fun fact--graph-based segmentation algorithms (min-cut, norm-cut, and even spectral clustering variants) are often considered a part. We primarily discussed two variants: \emph{top-down}, in which all data points start out in a single large cluster that is continually split until a stopping criterion is reached, and \emph{bottom-up}, in which all data points start out in their own clusters that are continually merged until a stopping criterion is reached. \\
+
+Here, we'll explore the latter, also known as \emph{agglomerative clustering}. The basic algorithm is as follows: \\
+
+\begin{enumerate}
+	\item Start with each point in a cluster of its own
+	\item Until there is only one cluster
+	\begin{enumerate}
+		\item Find closest pair of clusters
+		\item Merge them
+	\end{enumerate}
+	\item Return the tree of cluster-mergers
+\end{enumerate}
+
+To convert this procedure into an implementation, one only needs to be able to quantify how ``close'' two clusters are. While not mentioned in detail, we did discuss metrics that define distance between two clusters, such as single-link, complete-link, and average-link. \\
+
+In this problem, you'll look at an alternative approach to quantifying the distance between two disjoint clusters, proposed by Joe H. Ward in 1963. We will call it \textbf{Ward's metric}. \\
+
+Ward's metric simply says that the distance between two disjoint clusters, $X$ and $Y$, is how much the sum of squares will increase when we merge them. More formally:
+
+$$
+\Delta(X, Y) = \sum_{i \in X \cup Y} ||\vec{x}_i - \vec{\mu}_{X \cup Y} ||^2 - \sum_{i \in X} || \vec{x}_i - \vec{\mu}_X ||^2 - \sum_{i \in Y} || \vec{x}_i - \vec{\mu}_Y ||^2
+$$
+
+where $\vec{\mu}_Z$ is the centroid of cluster $Z$, and $\vec{x}_i$ is a data point in our corpus. Here, $\Delta(X, Y)$ is considered the \emph{merging cost} of combining clusters $X$ and $Y$ into one cluster, $X \cup Y$. That is, on each iteration, the two clusters with the lowest \emph{merging cost} is merged using Ward's metric as a distance measure. \\
+
+\textbf{[15pts]} Can you reduce the formula given for $\Delta(X, Y)$ to a simpler form? Provide the simplified formula and the steps to get there. Your formula should be in terms of the cluster sizes (i.e., the number of points in a given cluster, denoted as $n_X$ and $n_Y$) and the distance $|| \vec{\mu}_X - \vec{\mu}_Y ||^2$ between cluster centroids $\vec{\mu}_X$ and $\vec{\mu_Y}$ (yes, \textbf{only} the $n_X$, $n_Y$, $\vec{\mu}_X$, and $\vec{\mu}_Y$ symbols should be in your final equation). \\
+
+\textbf{[5pts]} Assume you are given two \emph{pairs} of clusters $P_1$ and $P_2$. The centers of the two clusters in the $P_1$ pair are farther apart than the pair of centers in $P_2$. Using Ward's metric, does agglomerative clustering \emph{always} choose to merge the two clusters in $P_2$? Why or why not? Justify your answer with a simple example.
+
+\subsection{Coding \textbf{[40pts]}}
+
+In this question, you'll be implementing a slightly simplified version of the MultiRankWalk (MRW) semi-supervised learning algorithm discussed in lecture. The paper is here: \url{https://lti.cs.cmu.edu/sites/default/files/research/reports/2009/cmulti09017.pdf} \\
+
+The basic procedure of MRW is similar to other graph-based random walk algorithms such as PageRank. For a graph $G$ defined by the set of vertices $V$ and edges $E$, the MRW procedure is as follows:
+
+$$
+\vec{r} = (1 - d)\vec{u} + dW\vec{r}
+$$
+
+where $W$ is the weighted transition matrix of graph $G$ from vertex $i$ to $j$ is given by $W_{ij} = 1/d_{ii}$, where $d_{ii}$ is the degree of the $i^{th}$ vertex. $\vec{u}$ is the normalized teleportation vector, where $|\vec{u}| = |V|$ and $||\vec{u}||_1 = 1$. $d$ is a constant damping factor, controlling how often random jumps are made. \\
+
+The affinity matrix $A$ will be determined using the radial-basis function kernel, also known as the Gaussian kernel or heat kernel. It has the form $A_{ij} = A_{ji} = e^{-\gamma ||\vec{x}_i - \vec{x}_j||^2}$, and is implemented in scikit-learn's \texttt{sklearn.metrics.pairwise} module as \texttt{rbf\_kernel()}. Once you have the affinity matrix $A$, the diagonal (degree) matrix $D$ can be found by summing the rows of $A$, i.e. $D_{ii} = \sum_j A_{ij}$. Finally, the weighted transition probability matrix $W$ can be found using $A$ and $D$ and the above formulation. \\
+
+Your task is to solve for the ranking vector $\vec{r}$ by iteratively substituting $\vec{r}^{t - 1}$ with $\vec{r}^t$ until convergence or a set number of iterations. \\
+
+In this implementation, the $\vec{u}$ vector actually functions as a \emph{seed vector}: this identifies vertices that are labeled and function as seeds for the subsequent label-spreading. ``Seeds'' are labeled data points used to initiate the label-spreading of the MRW algorithm and predict classes for unlabeled data. The original MRW paper cites several methods, including using PageRank to initially rank labeled vertices in terms of preference as seed vertices to MRW. Your code will need to implement both random seed selection, and degree-based seed selection. In the former, you'll randomly pick $k$ labeled data points from each class and use them as seeds. In the latter, you'll rank the labeled vertices of each class by their degree (i.e. sums of the rows of $A$) and select the top $k$ in each class. \\
+
+Critically, you will need to perform MRW for \textbf{each distinct class $c$ in the data}. Specifically, when initializing the labeled seeds in $\vec{u}$, you need to set each corresponding element $\vec{u}_i = 1$ such that $\vec{y}_i = c$. All other entries of $\vec{u}$ should be 0. Once this step is completed, you will need to normalize $\vec{u}$ such that $||\vec{u}||_1 = 1$. Next, you can proceed with MRW. Finally, you will repeat this process again for all unique labels $c$ in your dataset, so that at the end you'll have a set of ranking vectors $\vec{r}_1, \vec{r}_2, ..., \vec{r}_c$ for each class. \\
+
+Once you have generated a ranking vector $\vec{r}$ for each class, you'll then assign labels to all your unlabeled data. For the $i^{th}$ vertex, whichever ranking vector $\vec{r}$'s $i^{th}$ element is largest, assign the corresponding class label represented by that ranking vector to the unlabeled data point. Continue for all unlabeled data. \\
+
+Your code should be able to process: an input file containing the $n$ $m$-dimensional data points, the number of labeled data points $k$ to use from each class as seeds, whether to choose seeds randomly or by vertex degree, the damping factor $d$, and an output file to write the predicted classes for all data. \\
+
+You'll also be provided the boilerplate to read in the necessary command-line parameters:
+
+\begin{enumerate}
+	\item \texttt{-i}: a file path to a text file containing the data
+	\item \texttt{-d}: the damping factor (float between 0 and 1)
+	\item \texttt{-k}: number of data points per class to use as seeds
+	\item \texttt{-t}: type of seed selection to use, ``random'' or ``degree''
+	\item \texttt{-e}: the epsilon threshold, or squared difference of $\vec{r}^t$ and $\vec{r}^{t + 1}$ to determine convergence
+	\item \texttt{-g}: value of gamma for the pairwise RBF affinity kernel
+	\item \texttt{-o}: a file path to an output file, where the predicted labels will be written
+\end{enumerate}
+
+The format of the input file will be tab-delimited, where a single data point will be on one line. The first column will be the labels: any unlabeled data will have a label of -1. Functions are already written in the \texttt{assignment4.py-TEMPLATE} file that will handle reading in data and parsing command-line arguments. \\
+
+The format of the output file should be one label prediction per line; therefore, the number of lines in the input file and the output file should match exactly (so for the labeled data, you can either use the labels you read in from the file or the labels that are predicted from your ranking vectors, though in theory they should be the same). Essentially, fill in the -1 values in your initial label vector, then just write the vector to a text file, such that each element of the vector is on its own line. For your convenience, the ground-truth label files \texttt{y\_easy.txt} and \texttt{y\_hard.txt} for the full datasets are provided; you can use these to check how well your code is predicting the -1 labels. \\
+
+\textbf{HINT 1}: The value of gamma can substantially affect the accuracy of your method. Larger values shrink the neighborhoods and isolate points from each other; smaller values expand the neighborhoods and make everything look the same distance. If in doubt, plot the affinity matrix using \texttt{matplotlib.pyplot.imshow}, and you should see a block-diagonal-ish structure. For the easy dataset, try values around 0.5. For the harder dataset, try values in the 10-50 range. \\
+
+\textbf{HINT 2}: At the same time, adding more seeds per class can help immensely. The default value in the template script is only 1 seeded value per class; while you can still attain high-90s accuracy with proper values of gamma on the hard dataset, it's almost impossible to hit perfect accuracy without increasing the number of seeds. \\
+
+\textbf{HINT 3}: The two test datasets provided should not require any more than 100 iterations to converge using the default epsilon. \\
+
+\section*{Administration}
+\setcounter{subsection}{0}
+
+\subsection{Submitting}
+
+All submissions will go to \textbf{AutoLab}. You can access AutoLab at:
+
+\begin{itemize}
+	\item \url{https://autolab.cs.uga.edu}
+\end{itemize}
+	
+You can submit deliverables to the \textbf{Assignment 4} assessment that is open. When you do, you'll submit two files:
+
+\begin{enumerate}
+	\item \texttt{\textbf{assignment4.py}}: the Python script that implements your algorithms, and
+	\item \texttt{\textbf{assignment4.pdf}}: the PDF write-up with any questions that were asked
+\end{enumerate}
+
+These should be packaged together in a tarball; the archive can be named whatever you want when you upload it to AutoLab, but the files in the archive should be named \textbf{exactly} what is above. Deviating from this convention could result in the autograder failing! \\
+
+To create the tarball archive to submit, run the following command (on a *nix machine):
+
+\begin{verbatim}
+	> tar cvf assignment4.tar assignment4.py assignment4.pdf
+\end{verbatim}
+
+This will create a new file, \texttt{assignment4.tar}, which is basically a zip file containing your Python script and PDF write-up. Upload the archive to AutoLab. There's no penalty for submitting as many times as you need to, but keep in mind that swamping the server at the last minute may result in your submission being missed; AutoLab is programmed to close submissions \emph{promptly} at 11:59pm on October 19, so give yourself plenty of time! A late submission because the server got hammered at the deadline will \emph{not} be acceptable (there is a \emph{small} grace period to account for unusually high load at deadline, but I strongly recommend you avoid the problem altogether and start early). \\
+
+Also, to save time while you're working on the coding portion, you are welcome to create a tarball archive of just the Python script and upload that to AutoLab. Once you get the autograder score you're looking for, you can then include the PDF in the folder, tarball everything, and upload it. AutoLab stores the entire submission history of every student on every assignment, so your autograder (code) score will be maintained and I can just use your most recent submission to get the PDF.
+
+\subsection{Reminders}
+
+\begin{itemize}
+	\item If you run into problems, ping the \texttt{\#questions} room of the Slack chat. If you still run into problems, ask me. But please please please, \textbf{do NOT} ask Google to give you the code you seek! I will be on the lookout for this (and already know some of the most popular venues that might have solutions or partial solutions to the questions here).
+	\item Prefabricated solutions (e.g. \texttt{scikit-learn}, OpenCV) are NOT allowed! You have to do the coding yourself! But you \textbf{can} use the pairwise metrics in scikit-learn, as well as the vector norm in SciPy.
+	\item If you collaborate with anyone, just mention their names in a code comment and/or at the top of your homework writeup.
+\end{itemize}
+
+\end{document}
