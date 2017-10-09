@@ -216,9 +216,9 @@ $$
 \vec{r} = (1 - d)\vec{u} + dW\vec{r}
 $$
 
-where $W$ is the weighted transition matrix of graph $G$ from vertex $i$ to $j$ is given by $W_{ij} = 1/d_{ii}$, where $d_{ii}$ is the degree of the $i^{th}$ vertex. $\vec{u}$ is the normalized teleportation vector, where $|\vec{u}| = |V|$ and $||\vec{u}||_1 = 1$. $d$ is a constant damping factor, controlling how often random jumps are made. \\
+where $W$ is the weighted transition matrix of graph $G$ from vertex $i$ to $j$ is given by $W_{ij} = A_{ij} /d_{ii}$, where $d_{ii}$ is the degree of the $i^{th}$ vertex. $\vec{u}$ is the normalized teleportation vector, where $|\vec{u}| = |V|$ and $||\vec{u}||_1 = 1$. $d$ is a constant damping factor, controlling how often random jumps are made. \\
 
-The affinity matrix $A$ will be determined using the radial-basis function kernel, also known as the Gaussian kernel or heat kernel. It has the form $A_{ij} = A_{ji} = e^{-\gamma ||\vec{x}_i - \vec{x}_j||^2}$, and is implemented in scikit-learn's \texttt{sklearn.metrics.pairwise} module as \texttt{rbf\_kernel()}. Once you have the affinity matrix $A$, the diagonal (degree) matrix $D$ can be found by summing the rows of $A$, i.e. $D_{ii} = \sum_j A_{ij}$. Finally, the weighted transition probability matrix $W$ can be found using $A$ and $D$ and the above formulation. \\
+The value $A_{ij}$ comes from our use of an affinity matrix in representing the graph. \textbf{This is a deviation from the MRW paper}, which assumes a simple adjacency matrix. The affinity matrix $A$ will be determined using the radial-basis function kernel, also known as the Gaussian kernel or heat kernel. It has the form $A_{ij} = A_{ji} = e^{-\gamma ||\vec{x}_i - \vec{x}_j||^2}$, and is implemented in scikit-learn's \texttt{sklearn.metrics.pairwise} module as \texttt{rbf\_kernel()}. Once you have the affinity matrix $A$, the diagonal (degree) matrix $D$ can be found by summing the rows of $A$, i.e. $D_{ii} = \sum_j A_{ij}$. Finally, the weighted transition probability matrix $W$ can be found using $A$ and $D$ and the above formulation. \\
 
 Your task is to solve for the ranking vector $\vec{r}$ by iteratively substituting $\vec{r}^{t - 1}$ with $\vec{r}^t$ until convergence or a set number of iterations. \\
 
