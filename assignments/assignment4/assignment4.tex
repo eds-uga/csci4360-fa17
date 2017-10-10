@@ -170,7 +170,7 @@ One of the convenient properties of normalized graph Laplacians is the eigenvalu
 
 Consider a matrix $P$, where $P = D^{-1}A$, where $A$ is our affinity matrix and $D$ is the diagonal matrix. Each $p_{ij} = a_{ij} / d_{ii}$. Note the intuition of this operation: we are normalizing each edge by the total degree of the incoming vertex, essentially creating a ``transition probability'' $p_{ij}$ of transitioning from vertex $i$ to vertex $j$. In other words, each row of $P$ sums to 1, so it is therefore a valid probability transition matrix. Hence, $P^t$ is a matrix whose $\{i, j\}^{th}$ element shows the probability of being at vertex $j$ after $t$ number of steps, if one started at vertex $i$. \\
 
-\textbf{[10pts]} Show that $P^{\infty} = D^{-1/2} \vec{v}_1 \vec{v}_1^T D^{-1/2}$. This property shows that if points are viewed as vertices according to a transition probability matrix, then $\vec{v}_1$ is the only eigenvector needed to compute the probability distribution over $P^{\infty}$. \\
+\textbf{[10pts]} Show that $P^{\infty} = D^{-1/2} \vec{v}_1 \vec{v}_1^T D^{1/2}$. This property shows that if points are viewed as vertices according to a transition probability matrix, then $\vec{v}_1$ is the only eigenvector needed to compute the probability distribution over $P^{\infty}$. \\
 
 \textbf{[5pts]} Let $X$ be an $N \times d$ matrix, and $Y = X^T$. If the SVD of $Y = U\Sigma V^T$, show that the columns of $V$ are the PCA of $X$ (recall that PCA operates on the covariance $Q$ of $X$, where $Q = X^TX$).
 
